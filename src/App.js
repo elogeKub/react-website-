@@ -1,25 +1,41 @@
-import logo from './logo.svg';
-import './App.css';
+import * as React from "react";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
+import Header from "./components/Header";
+import Container from "@mui/material/Container";
+import FeaturedPosted from "./components/FeaturedPosted";
+import Grid from "@mui/material/Grid";
+import { featuredPosts } from "./data/Data";
+import { PostCard } from "./components/PostCard";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+const App = () => {
+  const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
+  const [data, setData] = React.useState(true);
+  const theme = React.useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode: data ? "dark" : "light",
+        },
+      }),
+    [prefersDarkMode]
   );
-}
 
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Container>
+        <Header />
+        <FeaturedPosted />
+        <br />
+        <Grid container spacing={4}>
+          {featuredPosts.map((post) => (
+            <PostCard post={post} key={post.title} />
+          ))}
+        </Grid>
+      </Container>
+    </ThemeProvider>
+  );
+};
 export default App;
